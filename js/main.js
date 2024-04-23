@@ -13,6 +13,7 @@ const stop = document.querySelector(".stop");
 const soundClips = document.querySelector(".sound-clips");
 const canvas = document.querySelector(".visualizer");
 const mainSection = document.querySelector(".main-controls");
+const logbox = document.querySelector("#logbox");
 
 // Disable stop button while not recording
 stop.disabled = true;
@@ -24,6 +25,7 @@ const canvasCtx = canvas.getContext("2d");
 // Main block for doing the audio recording
 if (navigator.mediaDevices.getUserMedia) {
   console.log("The mediaDevices.getUserMedia() method is supported.");
+  add2Log("The mediaDevices.getUserMedia() method is supported.");
 
   const constraints = { audio: true };
   let chunks = [];
@@ -37,6 +39,7 @@ if (navigator.mediaDevices.getUserMedia) {
       mediaRecorder.start();
       console.log(mediaRecorder.state);
       console.log("Recorder started.");
+      add2Log("Recorder started.");
       record.style.background = "red";
 
       stop.disabled = false;
@@ -47,6 +50,7 @@ if (navigator.mediaDevices.getUserMedia) {
       mediaRecorder.stop();
       console.log(mediaRecorder.state);
       console.log("Recorder stopped.");
+      add2Log("Recorder stopped.");
       record.style.background = "";
       record.style.color = "";
 
@@ -56,6 +60,7 @@ if (navigator.mediaDevices.getUserMedia) {
 
     mediaRecorder.onstop = function (e) {
       console.log("Last data to read (after MediaRecorder.stop() called).");
+      add2Log("Last data to read (after MediaRecorder.stop() called).");
 
       const clipName = prompt(
         "Enter a name for your sound clip?",
@@ -112,11 +117,13 @@ if (navigator.mediaDevices.getUserMedia) {
 
   let onError = function (err) {
     console.log("The following error occured: " + err);
+    add2Log("err: " + err);
   };
 
   navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
 } else {
   console.log("MediaDevices.getUserMedia() not supported on your browser!");
+  add2Log("MediaDevices.getUserMedia() not supported on your browser!");
 }
 
 function visualize(stream) {
@@ -171,6 +178,10 @@ function visualize(stream) {
     canvasCtx.stroke();
   }
 }
+
+  function add2Log(text){
+    logbox.innerHTML = text + "<br/>" + logbox.innerHTML;
+  }
 
 window.onresize = function () {
   canvas.width = mainSection.offsetWidth;
