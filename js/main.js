@@ -183,6 +183,18 @@ function visualize(stream) {
     logbox.innerHTML = text + "<br/>" + logbox.innerHTML;
   }
 
+  function listParams(){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    // Iterating the search parameters
+    for (const p of urlParams) {
+      add2Log("q: " + p);
+    }
+  }
+
+  listParams();
+
 window.onresize = function () {
   canvas.width = mainSection.offsetWidth;
 };
